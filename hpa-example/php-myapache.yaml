@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-myapache
+spec:
+  selector:
+    matchLabels:
+      run: php-myapache
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: php-myapache
+    spec:
+      containers:
+      - name: php-myapache
+        image: registry.k8s.io/hpa-example
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5005
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 250m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-service
+  labels:
+    run: php-myapache
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "5005"
+    prometheus.io/path: "/metrics"
+spec:
+  type: LoadBalancer
+  selector:
+    app: php-myapache
+  ports:
+  - port: 5005
+    targetPort: 5005
+    protocol: TCP
+    name: http
+  selector:
+    run: php-myapache

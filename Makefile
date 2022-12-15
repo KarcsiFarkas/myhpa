@@ -11,6 +11,11 @@ help:
 	@echo make svc	- get all services
 	@echo make deploy	- get all deployments
 	@echo make pods	- get all pods
+	@echo make deploydesc	- describe deployments
+	@echo make poddesc	- describe pods
+	@echo make svcdesc	- describe services
+	@echo make hpadesc	- describe hpa
+	@echo make run	- testing
 
 delete:
 	kubectl delete service php-service
@@ -31,6 +36,15 @@ apply:
 deploy:
 	kubectl get deployments -A
 
+svc:
+	kubectl get svc -A
+
+pods:
+	kubectl get po -A
+
+hpa:
+	kubectl get hpa -A
+
 deploydesc:
 	kubectl describe deployment -n=default
 
@@ -43,16 +57,5 @@ svcdesc:
 hpadesc:
 	kubectl describe hpa -n=default
 
-
-
-svc:
-	kubectl get svc -A
-
-pods:
-	kubectl get po -A
-
-hpa:
-	kubectl get hpa -A
-
 run:
-	ENDPOINT=http://10.109.194.60:5005/metrics k6 run -o influxdb=http://localhost:8086/k6 performance-test.js
+	ENDPOINT=http://10.100.94.241:5005/metrics k6 run -o influxdb=http://localhost:8086/k6 performance-test.js

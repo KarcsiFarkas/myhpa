@@ -31,6 +31,20 @@ apply:
 deploy:
 	kubectl get deployments -A
 
+deploydesc:
+	kubectl describe deployment -n=default
+
+poddesc:
+	kubectl describe pods -n=default
+
+svcdesc:
+	kubectl describe svc -n=default
+
+hpadesc:
+	kubectl describe hpa -n=default
+
+
+
 svc:
 	kubectl get svc -A
 
